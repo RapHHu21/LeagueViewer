@@ -1,0 +1,10 @@
+﻿{
+  "action": "cargoquery",
+  "format": "json",
+  "tables": "ScoreboardGames=SG, Tournaments=T",
+  "fields": "T.Name, SG.DateTime_UTC, SG.Team1, SG.Team2",
+  "where": "T.Name = 'LCK Cup 2026'",
+  "join_on": "SG.OverviewPage=T.OverviewPage",
+  "formatversion": "2"
+}
+// querry do dziabniecia teamuw grajacych w lck cup 2026
