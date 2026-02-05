@@ -7,4 +7,8 @@
   "join_on": "SG.OverviewPage=T.OverviewPage",
   "formatversion": "2"
 }
+
 // querry do dziabniecia teamuw grajacych w lck cup 2026
+
+//https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
+//https://lol.fandom.com/wiki/Special:CargoTables/Tournaments
