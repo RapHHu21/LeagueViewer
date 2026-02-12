@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LVsharedStuff", "LVsharedSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LVrefitLOLP", "LVrefitLQ\LVrefitLOLP.csproj", "{0F39C64A-4546-42A1-9C85-A4893CAEE752}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{96639E9D-AE88-445E-9856-67B69A171767}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,7 @@ Global
 		{64952965-E64A-4D74-BB54-D3BAC1C5A632}.Release|Any CPU.Build.0 = Release|Any CPU
 		{238E2C7A-63E2-4C6B-9E19-960B6AD07C7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{238E2C7A-63E2-4C6B-9E19-960B6AD07C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{238E2C7A-63E2-4C6B-9E19-960B6AD07C7D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{238E2C7A-63E2-4C6B-9E19-960B6AD07C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{238E2C7A-63E2-4C6B-9E19-960B6AD07C7D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A0C3956-4638-4222-9809-BA0F8F7A8ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,6 +36,10 @@ Global
 		{0F39C64A-4546-42A1-9C85-A4893CAEE752}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F39C64A-4546-42A1-9C85-A4893CAEE752}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F39C64A-4546-42A1-9C85-A4893CAEE752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96639E9D-AE88-445E-9856-67B69A171767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96639E9D-AE88-445E-9856-67B69A171767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96639E9D-AE88-445E-9856-67B69A171767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96639E9D-AE88-445E-9856-67B69A171767}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
