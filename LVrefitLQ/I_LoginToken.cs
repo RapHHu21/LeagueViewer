@@ -5,6 +5,7 @@ namespace LVrefitLOLP
     public interface I_LoginToken
     {
         [Get("/api.php")]
+        [Headers("Content-Type: application/x-www-form-urlencoded")]
         Task<ApiResponse<string>> LoginToken(
             [Query] string action = "query",
             [Query] string meta = "tokens",

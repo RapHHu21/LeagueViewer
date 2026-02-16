@@ -30,6 +30,11 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
+
+            <Button
+                Text="Login with bot"
+                Clicked="LogInBot"
+                />
         </VerticalStackLayout>
     </ScrollView>
 

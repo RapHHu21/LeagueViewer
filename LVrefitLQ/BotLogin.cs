@@ -1,4 +1,5 @@
 ﻿using Refit;
+using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 
@@ -25,34 +26,38 @@ namespace LVrefitLOLP
             {
                 var getToken = await api.LoginToken();
 
-                Console.WriteLine(getToken.RequestMessage.RequestUri);
+                Debug.WriteLine(getToken.RequestMessage.RequestUri);
 
                 if (getToken.IsSuccessStatusCode)
                 {
-                    Console.WriteLine(getToken.Content);
+                    Debug.WriteLine("");
+                    Debug.WriteLine(getToken.Content);
                     var jsonResponse = getToken.Content;
                     var parseJson = JsonDocument.Parse(jsonResponse);
-                    var tokenTest = getToken.Query.To
+                    
                     string? origToken = parseJson.RootElement
                         .GetProperty("query")
                         .GetProperty("tokens")
                         .GetProperty("logintoken")
                         .GetString();
 
-                    Console.WriteLine(origToken.EndsWith("\\"));
+                    Debug.WriteLine(origToken.EndsWith("\\"));
                     authToken = origToken;
-                    Console.WriteLine(authToken);
-                    
+                    Debug.WriteLine(authToken);
+                    Debug.WriteLine("token side");
+
                 }
                 else
                 {
-                    Console.WriteLine(getToken.StatusCode);
-                    Console.WriteLine(getToken.Error);                    
+                    Debug.WriteLine(getToken.StatusCode);
+                    Debug.WriteLine(getToken.Error);
+                    Debug.WriteLine("token side");
                 }
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
+                Debug.WriteLine("token side");
             }
         }
 
@@ -74,6 +79,14 @@ namespace LVrefitLOLP
 
             await GetToken(cookieHttpUrl);
 
+            var cookiesCheck = cookies.GetCookies(new Uri(urlPath));
+            
+            foreach (Cookie ciacho in cookiesCheck)
+            {
+                Debug.WriteLine($"ciasteczki po tokenie {ciacho.Value} = {ciacho.Domain}");
+            }
+
+
             if(authToken != null)
             {
 
@@ -82,49 +95,64 @@ namespace LVrefitLOLP
                 try
                 {
                     var botLogin = _username;
+                    Debug.WriteLine("czy token ma backslash: " + authToken.EndsWith("\\"));
                     var botParams = new BotLoginParams
                     {
                         lgpassword = _password,
                         lgtoken = authToken,
                     };
+                    
 
-                    Console.WriteLine(authToken.EndsWith("\\"));
+                    Debug.WriteLine("czy token w klasie ma slash" + botParams.lgtoken.EndsWith("\\"));
                     var logIn = await api.BotLoginPost(botParams, botLogin);
 
-                    Console.WriteLine(logIn.RequestMessage.RequestUri);
+
+                    Debug.WriteLine(logIn.RequestMessage.RequestUri);
 
                     if (logIn.IsSuccessStatusCode)
                     {
+                        //Debug.WriteLine(logIn.Content.ReadAsString());
                         //jakims hujem token ktory dostaje wyzej nie pasuje xd
 
-                        Console.WriteLine(logIn.Content);
-                        Console.WriteLine("pifko");
+                        Debug.WriteLine(logIn.Content);
+                        Debug.WriteLine("pifko");
                         var receivedTokenVar = JsonDocument.Parse(logIn.Content);
                         string receivedToken = receivedTokenVar.RootElement
                             .GetProperty("login")
                             .GetProperty("token")
                             .ToString();
-                        Console.WriteLine("wiadomosc po getProperty: ");
-                        Console.WriteLine(receivedToken);
-                        Console.WriteLine(receivedToken.EndsWith("\\"));
-                        Console.WriteLine(receivedToken == authToken);
+                        Debug.WriteLine("wiadomosc po getProperty: ");
+                        Debug.WriteLine(receivedToken);
+                        Debug.WriteLine(receivedToken.EndsWith("\\"));
+                        Debug.WriteLine(receivedToken == authToken);
+                        Debug.WriteLine("login side");
+
+                        var cookiesLogin = cookies.GetCookies(new Uri(urlPath));
+
+                        foreach (Cookie ciacho in cookiesLogin)
+                        {
+                            Debug.WriteLine($"ciasteczki po login {ciacho.Value} = {ciacho.Domain}");
+                        }
 
                     }
                     else
                     {
-                        Console.WriteLine(logIn.StatusCode);
-                        Console.WriteLine("piwo2");
+                        Debug.WriteLine(logIn.StatusCode);
+                        Debug.WriteLine("piwo2");
+                        Debug.WriteLine("login side");
                     }
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine(ex);
-                    Console.WriteLine("piwo3");
+                    Debug.WriteLine(ex);
+                    Debug.WriteLine("piwo3");
+                    Debug.WriteLine("login side");
                 }
             }
             else
             {
-                Console.WriteLine("auth token == null");
+                Debug.WriteLine("auth token == null");
+                Debug.WriteLine("login side");
             }
         }
     }
