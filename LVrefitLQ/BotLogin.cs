@@ -7,14 +7,26 @@ namespace LVrefitLOLP
 {
     public class BotLogin
     {
+        //login problem solved, encoding url instead of json in post
         private string _username;
         private string _password;
         private string? authToken;
         private string urlPath = "https://lol.fandom.com";
+        private string fileName = "botCreds.json";
         public BotLogin(string username, string password)
         {
-            _username = username;
-            _password = password;
+            readJsonCreds();
+        }
+
+        private void readJsonCreds()
+        {
+            string baseDir = AppContext.BaseDirectory;
+            string filePath = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..","..", "LVrefitLQ", fileName));
+            string readFromFile = File.ReadAllText(filePath);
+            DeserializePassword? passwordFile = JsonSerializer.Deserialize<DeserializePassword>(readFromFile);
+
+            _username = passwordFile.login;
+            _password = passwordFile.password;
         }
 
         public async Task GetToken(HttpClient cookieUrl)
@@ -26,11 +38,10 @@ namespace LVrefitLOLP
             {
                 var getToken = await api.LoginToken();
 
-                Debug.WriteLine(getToken.RequestMessage.RequestUri);
+                Debug.WriteLine("url:" + getToken.RequestMessage.RequestUri);
 
                 if (getToken.IsSuccessStatusCode)
-                {
-                    Debug.WriteLine("");
+                {                   
                     Debug.WriteLine(getToken.Content);
                     var jsonResponse = getToken.Content;
                     var parseJson = JsonDocument.Parse(jsonResponse);
@@ -40,24 +51,19 @@ namespace LVrefitLOLP
                         .GetProperty("tokens")
                         .GetProperty("logintoken")
                         .GetString();
-
-                    Debug.WriteLine(origToken.EndsWith("\\"));
+                    
                     authToken = origToken;
                     Debug.WriteLine(authToken);
-                    Debug.WriteLine("token side");
-
                 }
                 else
                 {
                     Debug.WriteLine(getToken.StatusCode);
                     Debug.WriteLine(getToken.Error);
-                    Debug.WriteLine("token side");
                 }
             }
             catch(Exception ex)
             {
                 Debug.WriteLine(ex);
-                Debug.WriteLine("token side");
             }
         }
 
@@ -94,38 +100,21 @@ namespace LVrefitLOLP
 
                 try
                 {
-                    var botLogin = _username;
-                    Debug.WriteLine("czy token ma backslash: " + authToken.EndsWith("\\"));
+                    var botLogin = _username;                    
                     var botParams = new BotLoginParams
                     {
                         lgpassword = _password,
                         lgtoken = authToken,
                     };
                     
-
-                    Debug.WriteLine("czy token w klasie ma slash" + botParams.lgtoken.EndsWith("\\"));
                     var logIn = await api.BotLoginPost(botParams, botLogin);
 
-
-                    Debug.WriteLine(logIn.RequestMessage.RequestUri);
+                    Debug.WriteLine("url:" + logIn.RequestMessage.RequestUri);
 
                     if (logIn.IsSuccessStatusCode)
                     {
-                        //Debug.WriteLine(logIn.Content.ReadAsString());
-                        //jakims hujem token ktory dostaje wyzej nie pasuje xd
-
                         Debug.WriteLine(logIn.Content);
-                        Debug.WriteLine("pifko");
-                        var receivedTokenVar = JsonDocument.Parse(logIn.Content);
-                        string receivedToken = receivedTokenVar.RootElement
-                            .GetProperty("login")
-                            .GetProperty("token")
-                            .ToString();
-                        Debug.WriteLine("wiadomosc po getProperty: ");
-                        Debug.WriteLine(receivedToken);
-                        Debug.WriteLine(receivedToken.EndsWith("\\"));
-                        Debug.WriteLine(receivedToken == authToken);
-                        Debug.WriteLine("login side");
+                        var receivedFile = JsonDocument.Parse(logIn.Content);
 
                         var cookiesLogin = cookies.GetCookies(new Uri(urlPath));
 
@@ -134,25 +123,30 @@ namespace LVrefitLOLP
                             Debug.WriteLine($"ciasteczki po login {ciacho.Value} = {ciacho.Domain}");
                         }
 
+                        //if login failed with 'NeedToken error'
+                        if(receivedFile.RootElement.GetProperty("login").GetProperty("result").ToString() != "Success")
+                        {
+                            var receivedTokenVar = JsonDocument.Parse(logIn.Content);
+                            string receivedToken = receivedTokenVar.RootElement
+                                .GetProperty("login")
+                                .GetProperty("token")
+                                .ToString();
+                            Debug.WriteLine(receivedToken);
+                        }
                     }
                     else
                     {
                         Debug.WriteLine(logIn.StatusCode);
-                        Debug.WriteLine("piwo2");
-                        Debug.WriteLine("login side");
                     }
                 }
                 catch(Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    Debug.WriteLine("piwo3");
-                    Debug.WriteLine("login side");
                 }
             }
             else
             {
                 Debug.WriteLine("auth token == null");
-                Debug.WriteLine("login side");
             }
         }
     }

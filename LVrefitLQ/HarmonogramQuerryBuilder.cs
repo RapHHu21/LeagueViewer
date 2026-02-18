@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 namespace LVrefitLQ
 {
-  //  
   //"action": "cargoquery",
   //"format": "json",
   //"tables": "ScoreboardGames=SG, Tournaments=T",
@@ -12,7 +11,6 @@ namespace LVrefitLQ
   //"where": "T.Name = 'LCK Cup 2026'",
   //"join_on": "SG.OverviewPage=T.OverviewPage",
   //"formatversion": "2"
-  //  
 
     public class HarmonogramQuerryBuilder
     {
@@ -21,12 +19,6 @@ namespace LVrefitLQ
         //parameter what to do in constructor
 
         static string endpoint = "https://lol.fandom.com";
-        //    "https://lol.fandom.com/api.php?action=cargoquery&format=json&" +
-        //    "limit=50&tables=ScoreboardGames%20%3D%20SG%2C%20Tournaments%20%3D%20T&" +
-        //    "fields=T.Name%2C%20SG.DateTime_UTC%2C%20SG.Team1%2C%20SG.Team2&" +
-        //    "where=T.Name%20%3D%20'LCK%20Cup%202026'&" +
-        //    "join_on=SG.OverviewPage%20%3D%20T.OverviewPage&formatversion=2";
-        ////rn its a whole querry just for the example of how it looks
         
 
         public HarmonogramQuerryBuilder()

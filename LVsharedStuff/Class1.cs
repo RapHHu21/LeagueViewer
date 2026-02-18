@@ -1,4 +1,4 @@
-﻿namespace LVsharedStuff
+﻿namespace LVhub
 {
     public class Class1
     {
