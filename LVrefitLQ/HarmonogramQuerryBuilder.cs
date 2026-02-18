@@ -1,6 +1,7 @@
 ﻿using LVrefitLOLP;
 using Refit;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net;
 
 namespace LVrefitLQ
 {
@@ -19,11 +20,14 @@ namespace LVrefitLQ
         //parameter what to do in constructor
 
         static string endpoint = "https://lol.fandom.com";
+        HttpClient client;
+        CookieHandler cookieHandler;
         
 
-        public HarmonogramQuerryBuilder()
+        public HarmonogramQuerryBuilder(HttpClient client, CookieHandler cookieHandler)
         {
-
+            this.client = client;
+            this.cookieHandler = cookieHandler;
         }
 
         private struct buildQuerry(string leagueRegion)
@@ -41,13 +45,15 @@ namespace LVrefitLQ
         public async Task testThing()
         {
 
-            var api = RestService.For<I_CargoQueryTest>("https://lol.fandom.com");
+            var api = RestService.For<I_CargoMatches>(client);
+
             try
             {
-                var result = await api.CargoQueryTests(
+                var result = await api.CargoMatches(
                     tables: "ScoreboardGames = SG, Tournaments = T",
                     fields: "T.Name, SG.DateTime_UTC",
-                    join_on: "SG.OverviewPage=T.OverviewPage"
+                    join_on: "SG.OverviewPage=T.OverviewPage",
+                    where: null
                 );
 
                 Console.WriteLine(result.RequestMessage.RequestUri);
@@ -55,11 +61,14 @@ namespace LVrefitLQ
                 if (result.IsSuccessStatusCode)
                 {
                     Console.WriteLine(result.Content);
+
+                    cookieHandler.ShowCookiesMSG("TestQuerry");
                 }
                 else
                 {
                     Console.WriteLine(result.StatusCode);
                 }
+
             }
             catch (Exception ex)
             {

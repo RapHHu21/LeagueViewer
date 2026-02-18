@@ -8,10 +8,15 @@ namespace TestRunner
         public static async Task Main(string[] args)
         {
             Console.WriteLine("uwu");
-            
 
-            BotLogin testowyBocik = new BotLogin("RapHHu21@LeagueViewerBot", "08nmqt8anhrdajveajtrdk2uakd7qo5q");
+            CookieHandler cookiesVar = new CookieHandler("https://lol.fandom.com");
+            HttpClient publicClient = cookiesVar.client;
+
+            BotLogin testowyBocik = new BotLogin(publicClient, cookiesVar);
             await testowyBocik.LogBot();
+
+            HarmonogramQuerryBuilder harmonogram = new HarmonogramQuerryBuilder(publicClient, cookiesVar);
+            await harmonogram.testThing();
         }
     }
 }

@@ -13,8 +13,12 @@ namespace LVrefitLOLP
         private string? authToken;
         private string urlPath = "https://lol.fandom.com";
         private string fileName = "botCreds.json";
-        public BotLogin(string username, string password)
+        HttpClient cookieClient;
+        CookieHandler cookieHandler;
+        public BotLogin(HttpClient client, CookieHandler cookieHandler)
         {
+            cookieClient = client;
+            this.cookieHandler = cookieHandler;
             readJsonCreds();
         }
 
@@ -32,7 +36,7 @@ namespace LVrefitLOLP
         public async Task GetToken(HttpClient cookieUrl)
         {           
 
-            var api = RestService.For<I_LoginToken>(cookieUrl);
+            var api = RestService.For<I_LoginToken>(cookieClient);
             
             try
             {
@@ -68,35 +72,17 @@ namespace LVrefitLOLP
         }
 
         public async Task LogBot()
-        {
+        {         
 
-            var cookies = new CookieContainer();
-            var handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                UseCookies = true,
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
+            await GetToken(cookieClient);           
 
-            var cookieHttpUrl = new HttpClient(handler)
-            {
-                BaseAddress = new Uri(urlPath)
-            };
-
-            await GetToken(cookieHttpUrl);
-
-            var cookiesCheck = cookies.GetCookies(new Uri(urlPath));
-            
-            foreach (Cookie ciacho in cookiesCheck)
-            {
-                Debug.WriteLine($"ciasteczki po tokenie {ciacho.Value} = {ciacho.Domain}");
-            }
+            cookieHandler.ShowCookiesMSG("GetToken");
 
 
             if(authToken != null)
             {
 
-                var api = RestService.For<I_BotLogin>(cookieHttpUrl);
+                var api = RestService.For<I_BotLogin>(cookieClient);
 
                 try
                 {
@@ -116,12 +102,7 @@ namespace LVrefitLOLP
                         Debug.WriteLine(logIn.Content);
                         var receivedFile = JsonDocument.Parse(logIn.Content);
 
-                        var cookiesLogin = cookies.GetCookies(new Uri(urlPath));
-
-                        foreach (Cookie ciacho in cookiesLogin)
-                        {
-                            Debug.WriteLine($"ciasteczki po login {ciacho.Value} = {ciacho.Domain}");
-                        }
+                        cookieHandler.ShowCookiesMSG("LogIn");
 
                         //if login failed with 'NeedToken error'
                         if(receivedFile.RootElement.GetProperty("login").GetProperty("result").ToString() != "Success")
