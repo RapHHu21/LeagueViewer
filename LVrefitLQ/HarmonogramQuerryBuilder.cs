@@ -5,6 +5,7 @@ using System.Net;
 
 namespace LVrefitLQ
 {
+
   //"action": "cargoquery",
   //"format": "json",
   //"tables": "ScoreboardGames=SG, Tournaments=T",
@@ -13,27 +14,22 @@ namespace LVrefitLQ
   //"join_on": "SG.OverviewPage=T.OverviewPage",
   //"formatversion": "2"
 
-    public class HarmonogramQuerryBuilder
+    public class HarmonogramQuerryBuilder : A_RefitRequester
     {
         //get current time
         //get league
         //parameter what to do in constructor
 
-        static string endpoint = "https://lol.fandom.com";
-        HttpClient client;
-        CookieHandler cookieHandler;
-        
+        static string endpoint = "https://lol.fandom.com"; //kinda useless rn  
 
-        public HarmonogramQuerryBuilder(HttpClient client, CookieHandler cookieHandler)
+        public HarmonogramQuerryBuilder(HttpClient CCclient, CookieHandler CCcookieHandler) : base(CCclient, CCcookieHandler)
         {
-            this.client = client;
-            this.cookieHandler = cookieHandler;
         }
 
-        private struct buildQuerry(string leagueRegion)
+        public async Task buildQuerry()            
         {
-            string datetime = getDateTime();            
-            
+            string datetime = getDateTime();
+
         }
 
         public static string getDateTime()
@@ -45,7 +41,7 @@ namespace LVrefitLQ
         public async Task testThing()
         {
 
-            var api = RestService.For<I_CargoMatches>(client);
+            var api = RestService.For<I_CargoMatches>(cookieClient);
 
             try
             {
@@ -75,51 +71,5 @@ namespace LVrefitLQ
                 Console.WriteLine(ex);
             }
         }
-
-        public async Task testWiki2()
-        {
-            var api = RestService.For<ItestWiki>("http://en.wikipedia.org/w");
-            try
-            {
-                var res = await api.WikiQueryAsync(
-                    action: "query",
-                    list: "search",
-                    srSearch: "Craig Noone",
-                    format: "json"
-                );
-
-
-                if (!res.IsSuccessStatusCode)
-                {
-                    Console.WriteLine(res.Content);
-                    Console.WriteLine("wypadek1");
-                }
-                else
-                {
-                    Console.WriteLine(res.StatusCode);
-                    Console.WriteLine("wypadek2");
-                }
-
-
-
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                Console.WriteLine("wypadek3");
-            }
-        }
-
     }
-
-    public interface ItestWiki
-    {
-        [Get("/api.php")]
-        Task<ApiResponse<string>> WikiQueryAsync(
-            [AliasAs("action")] string action,
-            [AliasAs("list")] string list,
-            [AliasAs("srsearch")] string srSearch,
-            [AliasAs("format")] string format
-            );
-    }
-
 }

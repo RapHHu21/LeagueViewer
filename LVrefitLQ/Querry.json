@@ -8,7 +8,18 @@
   "formatversion": "2"
 }
 
-// querry do dziabniecia teamuw grajacych w lck cup 2026
+{
+  "action": "cargoquery",
+  "format": "json",
+  "limit": "25",
+  "tables": "Tournaments=T",
+  "fields": "T.Name, T.Region, T.TournamentLevel, T.Date",
+  "where": "T.Date >= \"2026-01-01\" AND T.TournamentLevel = \"Primary\"",
+  "order_by": "T.Date",
+  "formatversion": "2"
+}
+
+
 
 //https://lol.fandom.com/wiki/Special:CargoTables/ScoreboardGames
 //https://lol.fandom.com/wiki/Special:CargoTables/Tournaments

@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace LVrefitLOLP
 {
-    public class BotLogin
+    public class BotLogin : A_RefitRequester
     {
         //login problem solved, encoding url instead of json in post
         private string _username;
@@ -13,12 +13,9 @@ namespace LVrefitLOLP
         private string? authToken;
         private string urlPath = "https://lol.fandom.com";
         private string fileName = "botCreds.json";
-        HttpClient cookieClient;
-        CookieHandler cookieHandler;
-        public BotLogin(HttpClient client, CookieHandler cookieHandler)
+
+        public BotLogin(HttpClient CCclient, CookieHandler CCcookieHandler) : base(CCclient, CCcookieHandler)
         {
-            cookieClient = client;
-            this.cookieHandler = cookieHandler;
             readJsonCreds();
         }
 
