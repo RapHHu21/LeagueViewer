@@ -1,7 +1,5 @@
 ﻿using LVrefitLOLP;
 using Refit;
-using System.Diagnostics;
-using System.Net;
 
 namespace LVrefitLQ
 {

@@ -6,6 +6,7 @@ namespace LVrefitLOLP
     {
         //base querry for matches
         [Get("/api.php")]
+        [Headers("Content-Type: application/x-www-form-urlencoded")]
         Task<ApiResponse<string>> CargoMatches(
             [AliasAs("where")] string? where,
             [AliasAs("group_by")] string? group_by = null,

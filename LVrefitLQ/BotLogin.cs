@@ -1,6 +1,5 @@
 ﻿using Refit;
 using System.Diagnostics;
-using System.Net;
 using System.Text.Json;
 
 namespace LVrefitLOLP

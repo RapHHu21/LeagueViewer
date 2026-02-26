@@ -7,7 +7,7 @@ namespace TestRunner
     {
         public static async Task Main(string[] args)
         {
-            Console.WriteLine("uwu");
+            //Console.WriteLine("uwu");
 
             CookieHandler cookiesVar = new CookieHandler("https://lol.fandom.com");
             HttpClient publicClient = cookiesVar.client;
@@ -15,8 +15,13 @@ namespace TestRunner
             BotLogin testowyBocik = new BotLogin(publicClient, cookiesVar);
             await testowyBocik.LogBot();
 
-            HarmonogramQuerryBuilder harmonogram = new HarmonogramQuerryBuilder(publicClient, cookiesVar);
-            await harmonogram.testThing();
+            //HarmonogramQuerryBuilder harmonogram = new HarmonogramQuerryBuilder(publicClient, cookiesVar);
+            //await harmonogram.testThing();
+
+            
+            TournamentNamesFinder findName = new TournamentNamesFinder(publicClient, cookiesVar);
+            await findName.GetTournamentNames();
+
         }
     }
 }

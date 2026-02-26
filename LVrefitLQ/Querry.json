@@ -6,9 +6,7 @@
   "where": "T.Name = 'LCK Cup 2026'",
   "join_on": "SG.OverviewPage=T.OverviewPage",
   "formatversion": "2"
-}
-
-{
+} {
   "action": "cargoquery",
   "format": "json",
   "limit": "25",
@@ -18,6 +16,10 @@
   "order_by": "T.Date",
   "formatversion": "2"
 }
+
+//T.DateStart - start of tournament, T.Date - end of tournament
+//INSTANCE OF A TOURNAMENT IS JUST ONE PHASE, ex group stage, playoffs (of the same tournament) is different tournament
+//where T.Name Like "%LCK%" - checks for t.name that has ...LCK.. 
 
 
 
