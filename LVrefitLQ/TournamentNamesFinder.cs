@@ -1,5 +1,6 @@
 ﻿
 using Refit;
+using System.Text.Json;
 
 namespace LVrefitLOLP
 {
@@ -31,7 +32,7 @@ namespace LVrefitLOLP
 
                 var result = await api.CargoMatches(
                     tables: "Tournaments=T",
-                    fields:"T.Name",
+                    fields: "T.Name, T.Region, T.TournamentLevel, T.Date",
                     where:"T.TournamentLevel=\"Primary\" AND T.DateStart>=" + "\"" + dateToSend+ "\"",
                     order_by:"T.DateStart ASC",
                     join_on:""
@@ -39,7 +40,33 @@ namespace LVrefitLOLP
 
                 if (result.IsSuccessStatusCode)
                 {
-                    Console.WriteLine(result.Content);
+
+                    var jsonResult = JsonDocument.Parse(result.Content);
+
+                    DeserializeCargoNames? deserializedNames = JsonSerializer.Deserialize<DeserializeCargoNames>(result.Content);
+
+                    string fileName = "CargoTournamentNames.json";
+                    string baseDir = AppContext.BaseDirectory;
+                    string filepath = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "..", "LVrefitLQ", fileName));
+
+                    var jsonOptions = new JsonSerializerOptions
+                    {
+                        WriteIndented =true
+                    };
+
+                    string jsonString = JsonSerializer.Serialize(jsonResult, jsonOptions);
+                    await File.WriteAllTextAsync(filepath, jsonString);
+
+
+                    Console.WriteLine("Test Start");
+                    foreach (var tournamentNameS in deserializedNames.cargoquery)
+                    {
+                        Console.WriteLine(tournamentNameS.title.Name);
+                    }
+                    Console.WriteLine("Test End");
+
+                    string tournamentName = deserializedNames.cargoquery[0].title.Name;
+                    Console.WriteLine(tournamentName);
                     Console.WriteLine(result.RequestMessage.RequestUri);
                     Console.WriteLine("test nazw turniejuw");
                 }
