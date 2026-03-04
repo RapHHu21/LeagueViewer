@@ -8,11 +8,16 @@ namespace LVrefitLOLP
     {
         //class to find full name of a tournament
         private string[] regionals = {"LCK", "LPL", "LEC", "CBLOL", "LCS" }; //main leagues
-        private string internationals;
+        int thisYear = DateTime.Today.Year;
+        DateTime winterSplit; //year datetime.year, rest hardcoded
+        DateTime springSplit;
+        DateTime summmerSplit;
 
         public TournamentNamesFinder(HttpClient CCclient, CookieHandler CCcookieHandler) : base(CCclient, CCcookieHandler)
         {
-
+            winterSplit = new DateTime(thisYear, 1, 1);
+            springSplit = new DateTime(thisYear, 4, 1);
+            summmerSplit = new DateTime(thisYear, 7, 1);
         }
 
         public async Task GetTournamentNames()
@@ -21,19 +26,50 @@ namespace LVrefitLOLP
 
             try
             {
-
                 DateTime date = DateTime.UtcNow;
-                DateTime currentDate = date.AddDays(-25);
-                string day = currentDate.Day.ToString();
-                string month = currentDate.Month.ToString();
-                string year = currentDate.Year.ToString();
+                Console.WriteLine(summmerSplit.Month);
+                int thisMonth = date.Month;
+                DateTime currentSplit;
 
-                string dateToSend = year + "-" + month + "-" + day;
+
+                switch (thisMonth){
+                    case >= 7:
+                        currentSplit = summmerSplit;
+                        break;
+                    case >= 4:
+                        currentSplit = springSplit;
+                        break;
+                    case >= 1:
+                        currentSplit = winterSplit;
+                        break;
+                    default:
+                        currentSplit = DateTime.UtcNow;
+                        break;
+                }
+
+                Console.WriteLine("current split");
+                Console.WriteLine(currentSplit);
+
+                string day_end = currentSplit.Day.ToString();
+                string month_end = currentSplit.Month.ToString();
+                string year_end = currentSplit.Year.ToString();
+
+
+                string day_start = date.Day.ToString();
+                string month_start = date.Month.ToString();
+                string year_start = date.Year.ToString();
+
+
+
+                string dateToSend_start = year_end + "-" + month_end + "-" + day_end;
+                string dateToSend_end = year_start + "-" + month_start + "-" + day_start;
 
                 var result = await api.CargoMatches(
                     tables: "Tournaments=T",
                     fields: "T.Name, T.Region, T.TournamentLevel, T.Date",
-                    where:"T.TournamentLevel=\"Primary\" AND T.DateStart>=" + "\"" + dateToSend+ "\"",
+                    where:"T.TournamentLevel=\"Primary\" AND T.DateStart>=" + "\"" + dateToSend_start + "\""
+                            + "and T.Date>="+"\"" + dateToSend_end + "\"",
+
                     order_by:"T.DateStart ASC",
                     join_on:""
                     );
