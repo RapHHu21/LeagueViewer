@@ -1,8 +1,14 @@
 ﻿
 namespace LVrefitLOLP
-{
+{   
+    public class DeserializedCargoNamesSplit()
+    {
+        public DeserializeCargoNames? DeserializeCargoNames { get; set; }
+    }
+
     public class DeserializeCargoNames
     {
+        public string? header { get; set; }
         public List<TitleField>? cargoquery { get; set; }
 
     }

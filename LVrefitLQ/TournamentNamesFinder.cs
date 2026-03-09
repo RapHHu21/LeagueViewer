@@ -1,17 +1,20 @@
 ﻿
 using Refit;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace LVrefitLOLP
 {
     public class TournamentNamesFinder : A_RefitRequester
     {
         //class to find full name of a tournament
-        private string[] regionals = {"LCK", "LPL", "LEC", "CBLOL", "LCS" }; //main leagues
+        //regionals = {"LCK", "LPL", "LEC", "CBLOL", "LCS" } - abbreviations of main leagues
         int thisYear = DateTime.Today.Year;
         DateTime winterSplit; //year datetime.year, rest hardcoded
         DateTime springSplit;
         DateTime summmerSplit;
+        DateTime currentSplit;
+        string currentSplitName;
 
         public TournamentNamesFinder(HttpClient CCclient, CookieHandler CCcookieHandler) : base(CCclient, CCcookieHandler)
         {
@@ -29,18 +32,20 @@ namespace LVrefitLOLP
                 DateTime date = DateTime.UtcNow;
                 Console.WriteLine(summmerSplit.Month);
                 int thisMonth = date.Month;
-                DateTime currentSplit;
 
 
                 switch (thisMonth){
                     case >= 7:
                         currentSplit = summmerSplit;
+                        currentSplitName = "Summer Split";
                         break;
                     case >= 4:
                         currentSplit = springSplit;
+                        currentSplitName = "Spring Split";
                         break;
                     case >= 1:
                         currentSplit = winterSplit;
+                        currentSplitName = "Winter Split";
                         break;
                     default:
                         currentSplit = DateTime.UtcNow;
@@ -90,7 +95,11 @@ namespace LVrefitLOLP
                         WriteIndented =true
                     };
 
-                    string jsonString = JsonSerializer.Serialize(jsonResult, jsonOptions);
+                    JsonNode resultJsonWheader = JsonNode.Parse(result.Content);
+                    resultJsonWheader["header"] = currentSplitName;
+
+                    string jsonString = resultJsonWheader.ToJsonString(jsonOptions);
+                    //File.WriteAllText();
                     await File.WriteAllTextAsync(filepath, jsonString);
 
 
