@@ -5,7 +5,7 @@ namespace DesktopLeagueViewer
 {
     public partial class MainPage : ContentPage
     {
-        BotLogin logBot = new BotLogin("RapHHu21@LeagueViewerBot", "08nmqt8anhrdajveajtrdk2uakd7qo5q");
+        BotLogin log;
 
         int count = 0;
 
