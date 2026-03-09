@@ -1,7 +1,12 @@
-﻿{
-  "login": "RapHHu21@LeagueViewerBot",
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-  "password": "string",
-
-  "url": "https//lol.fandom.com/wiki/Special:BotPasswords/LeagueViewerBot"
+namespace LVrefitLOLP
+{
+    class botCreds
+    {
+    }
 }
